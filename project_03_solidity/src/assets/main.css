@@ -1,0 +1,64 @@
+.p1 {
+    padding: 1rem;
+}
+
+.p2 {
+    padding: 2rem;
+}
+
+.p3 {
+    padding: 3rem;
+}
+
+.mb1 {
+    margin-bottom: 1rem;
+}
+
+.row1{grid-row-start: 1}
+.row2{grid-row-start: 2 }
+.row3{grid-row-start: 3}
+.span2cols{grid-column: 1 / span 2;}
+.span3rows{grid-row: 1 / span 3}
+
+
+/* COLORS */
+.violet {
+  background: rgba(89, 25, 138, 1);
+}
+
+.blue {
+  background: rgba(90, 90, 235, 1);
+}
+
+.violet-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 18, 31, 0),
+    70%,
+    rgba(167, 79, 236, 0.5)
+  );
+}
+
+.blue-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 18, 31, 0),
+    70%,
+    rgba(90, 90, 235, 0.5)
+  );
+}
+
+.opaque {
+  background: rgba(42, 28, 50, 1);
+}
+
+.gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(42, 28, 50, 1),
+    99%,
+    rgba(167, 79, 236, 0)
+  );
+}
+
+/* END COLORS */

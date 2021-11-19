@@ -2,31 +2,19 @@
   <div class="home" v-if="openCollectiveAccount">
     <div class="card-home-wrapper">
       <card
-          :title="`${openCollectiveAccount.name}`"
-          :subtitle="`Ξ\t\t${openCollectiveAccount.balance} Tokens`"
+          :title="`Enterprise name: ${openCollectiveAccount.name}`"
+          :subtitle="`The balance on your enterprise account is: \t\t${openCollectiveAccount.balance}`"
           :gradient="true"
+          :blue="true"
       >
-        <div class="explanations">
-          This data has been fetched from the blockchain. You started by
-          connecting MetaMask, and you fetched your data by reading the
-          blockchain. Try to modify the code to see what's happening!
+        <div class="explanations p1">
+          Find below the members that belongs to this enterprise:
+          <MemberList
+              :members="this.openCollectiveAccount.members.map(eth => truncateEth(eth))"
+              title="Members in this enterprise: ">
+          </MemberList>
         </div>
-        <div class="explanations">
-          On your account on the contract, you have
-          {{ openCollectiveAccount.balance }} tokens. If you click
-          <button class="button-link" @click="addTokens">here</button>
-          , you can
-          add some token to your account. Just give it a try! And think to put
-          an eye on Ganache!
-        </div>
-        <div>
-          Members:
-          <ul id="members-enterprise-account">
-            <li v-for="item in openCollectiveAccount.members" :key="item">
-              {{ item }}
-            </li>
-          </ul>
-        </div>
+
       </card>
     </div>
   </div>
@@ -37,10 +25,11 @@
 import {computed, defineComponent} from 'vue'
 import {useStore} from "vuex";
 import Card from "@/components/Card.vue";
+import MemberList from "@/components/MemberList.vue";
 
 export default defineComponent({
   name: 'EnterpriseAccount',
-  components: {Card},
+  components: {Card, MemberList},
   setup() {
     const store = useStore()
     const address = computed(() => store.state.account.address)
@@ -69,22 +58,4 @@ export default defineComponent({
   margin: auto;
 }
 
-.explanations {
-  padding: 12px;
-}
-
-.button-link {
-  display: inline;
-  appearance: none;
-  border: none;
-  background: none;
-  color: inherit;
-  text-decoration: underline;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-}
 </style>

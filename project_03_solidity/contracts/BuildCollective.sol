@@ -2,57 +2,33 @@ pragma solidity >=0.4.22 <0.9.0;
 pragma experimental ABIEncoderV2;
 
 import "./Ownable.sol";
+import {Model} from "./Model.sol";
 
 contract BuildCollective is Ownable {
 
-    struct User {
-        address userAddress;
-        string username;
-        uint256 balance;
-        bool registered;
-    }
+    event UserSignedUp(address indexed userAddress, Model.User user);
+    event EnterpriseSignedUp(address indexed ownerAddress, Model.Enterprise enterprise);
+    event ProjectCreated(address indexed creatorAddress, Model.Project enterprise);
+    event BountyCreated(uint256 indexed projectId, Model.Bounty enterprise);
 
-    struct Enterprise {
-        string name;
-        address owner;
-        uint256 balance;
-        address[] members;
-        bool registered;
-    }
-
-    struct RegistrationRecord {
-        bool registered;
-        bool isEnterprise;
-    }
-
-    struct Project {
-        string name;
-        string mission;
-        address owner;
-        address[] members;
-        uint32 balance;
-    }
-
-    mapping(address => User) private users;
-    mapping(address => Enterprise) private enterprises;
+    mapping(address => Model.User) private users;
+    mapping(address => Model.Enterprise) private enterprises;
     mapping(address => uint16) private ownerProjectCountMapping;
-    Project[] private projects;
+    Model.Project[] private projects;
+    mapping(uint256 => Model.Bounty[]) private projectBountyMapping;
+    uint private ID_COUNTER = 0;
 
-    event UserSignedUp(address indexed userAddress, User user);
-    event EnterpriseSignedUp(address indexed ownerAddress, Enterprise enterprise);
-    event ProjectCreated(address indexed creatorAddress, Project enterprise);
-
-    function user(address userAddress) public view returns (User memory) {
+    function user(address userAddress) public view returns (Model.User memory) {
         return users[userAddress];
     }
 
-    function enterprise(address enterpriseAddress) public view returns (Enterprise memory) {
+    function enterprise(address enterpriseAddress) public view returns (Model.Enterprise memory) {
         return enterprises[enterpriseAddress];
     }
 
-    function signUp(string memory username) public returns (User memory) {
+    function signUp(string memory username) public returns (Model.User memory) {
         require(bytes(username).length > 0);
-        users[msg.sender] = User(msg.sender, username, 0, true);
+        users[msg.sender] = Model.User(msg.sender, username, 0, true);
         emit UserSignedUp(msg.sender, users[msg.sender]);
         return users[msg.sender];
     }
@@ -60,9 +36,9 @@ contract BuildCollective is Ownable {
     function signUpEnterprise(
         string memory enterpriseName,
         address[] memory members,
-        uint256 balance) public returns (Enterprise memory) {
+        uint256 balance) public returns (Model.Enterprise memory) {
         require(bytes(enterpriseName).length > 0);
-        enterprises[msg.sender] = Enterprise(enterpriseName, msg.sender, balance, members, true);
+        enterprises[msg.sender] = Model.Enterprise(enterpriseName, msg.sender, balance, members, true);
         emit EnterpriseSignedUp(msg.sender, enterprises[msg.sender]);
         return enterprises[msg.sender];
     }
@@ -73,8 +49,8 @@ contract BuildCollective is Ownable {
         return true;
     }
 
-    function getRegistrationRecord() public view returns(RegistrationRecord memory rr){
-        rr = RegistrationRecord(false, false);
+    function getRegistrationRecord() public view returns (Model.RegistrationRecord memory rr){
+        rr = Model.RegistrationRecord(false, false);
         rr.registered = users[msg.sender].registered || enterprises[msg.sender].registered;
         rr.isEnterprise = enterprises[msg.sender].registered;
     }
@@ -85,24 +61,49 @@ contract BuildCollective is Ownable {
     //    return true;
     //  }
 
-    function createProject(string memory name, string memory mission, address[] memory members)  public returns(Project memory p) {
+    function createProject(string memory name, string memory mission, address[] memory members) public returns (Model.Project memory p) {
         require(users[msg.sender].registered || enterprises[msg.sender].registered);
-        p = Project(name, mission, msg.sender, members, 0);
+        p = Model.Project(name, mission, msg.sender, members, 0, getID());
         projects.push(p);
         ownerProjectCountMapping[msg.sender]++;
         emit ProjectCreated(msg.sender, p);
     }
 
-    function fetchProjects(address projectOwner) public view returns(Project[] memory) {
-        Project[] memory result = new Project[](ownerProjectCountMapping[projectOwner]);
+    function fetchProjects(address projectOwner) public view returns (Model.Project[] memory) {
+        Model.Project[] memory result = new Model.Project[](ownerProjectCountMapping[projectOwner]);
         uint16 counter = 0;
-        for(uint i = 0; i < projects.length; i++){
-            if(projects[i].owner == projectOwner) {
+        for (uint i = 0; i < projects.length; i++) {
+            if (projects[i].owner == projectOwner) {
                 result[counter] = projects[i];
                 counter++;
             }
         }
         return result;
+    }
+
+    function createBounty(uint256 projectId,
+        string memory description,
+        uint8 weiBounty,
+        string memory issueTrackerUrl) public returns (Model.Bounty memory bounty) {
+
+        bool allowed = false;
+        for (uint i = 0; i < projects.length; i++) {
+            if (projects[i].id == projectId && projects[i].owner == msg.sender) {
+                allowed = true;
+            }
+        }
+        require(allowed);
+        bounty = Model.Bounty(msg.sender, description, issueTrackerUrl, weiBounty, projectId, true);
+        projectBountyMapping[projectId].push(bounty);
+        emit BountyCreated(projectId, bounty);
+    }
+
+    function fetchBounties(uint256 projectId) public view returns(Model.Bounty[] memory bounties) {
+        bounties = projectBountyMapping[projectId];
+    }
+
+    function getID() private returns (uint) {
+        return ++ID_COUNTER;
     }
 
 }

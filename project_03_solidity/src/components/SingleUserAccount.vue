@@ -2,16 +2,16 @@
   <div class="home" v-if="openCollectiveAccount">
     <div class="card-home-wrapper">
       <card
-        :title="`${openCollectiveAccount.name}`"
-          :subtitle="`Ξ\t\t${openCollectiveAccount.balance} Tokens`"
+        :title="`Personal account of: ${openCollectiveAccount.name}`"
+          :subtitle="`Personal account balance: \t\t${openCollectiveAccount.balance} Tokens`"
           :gradient="true"
       >
-        <div class="explanations">
+        <div class="p1">
           This data has been fetched from the blockchain. You started by
           connecting MetaMask, and you fetched your data by reading the
           blockchain. Try to modify the code to see what's happening!
         </div>
-        <div class="explanations">
+        <div class="p1">
           On your account on the contract, you have
           {{ openCollectiveAccount.balance }} tokens. If you click
           <button class="button-link" @click="addTokens">here</button>
@@ -59,10 +59,6 @@ export default defineComponent({
   justify-content: center;
   max-width: 500px;
   margin: auto;
-}
-
-.explanations {
-  padding: 12px;
 }
 
 .button-link {

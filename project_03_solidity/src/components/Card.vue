@@ -2,11 +2,11 @@
   <div class="wrapper" :class="blue ? 'blue-gradient' : 'violet-gradient'">
     <div class="card" :class="gradient && !blue ? 'gradient' : 'opaque'">
       <div>
-        <div class="card-title" :class="blue ? 'blue' : 'violet'" v-if="title">
+        <div class="card-title p1" :class="blue ? 'blue' : 'violet'" v-if="title">
           {{ title }}
         </div>
         <div
-          class="card-subtitle"
+          class="card-subtitle p1"
           :class="blue ? 'blue wrap-text' : 'violet wrap-text'"
           v-if="subtitle"
         >
@@ -39,24 +39,6 @@ export default {
   display: flex;
 }
 
-.violet-gradient {
-  background: linear-gradient(
-    to bottom,
-    rgba(26, 18, 31, 0),
-    70%,
-    rgba(167, 79, 236, 0.5)
-  );
-}
-
-.blue-gradient {
-  background: linear-gradient(
-    to bottom,
-    rgba(26, 18, 31, 0),
-    70%,
-    rgba(90, 90, 235, 0.5)
-  );
-}
-
 .card {
   flex: 1;
   display: flex;
@@ -65,34 +47,8 @@ export default {
   overflow: hidden;
 }
 
-.opaque {
-  background: rgba(42, 28, 50, 1);
-}
-
-.gradient {
-  background: linear-gradient(
-    to bottom,
-    rgba(42, 28, 50, 1),
-    99%,
-    rgba(167, 79, 236, 0)
-  );
-}
-
-.card-title,
-.card-subtitle {
-  padding: 18px;
-}
-
 .wrap-text {
   white-space: normal !important;
-}
-
-.violet {
-  background: rgb(89, 25, 138);
-}
-
-.blue {
-  background: rgb(90, 90, 235);
 }
 
 .card-title {

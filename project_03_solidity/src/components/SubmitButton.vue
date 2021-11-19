@@ -1,5 +1,5 @@
 <template lang="html">
-  <button class="button" type="submit">
+  <button :class="`button ${this.cssClass}`" type="submit">
     <div class="button-body">
       Submit
     </div>
@@ -10,7 +10,8 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'SubmitButton'
+  name: 'SubmitButton',
+  props: ['cssClass']
 })
 </script>
 

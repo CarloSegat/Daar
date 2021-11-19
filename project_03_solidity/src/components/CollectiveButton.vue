@@ -45,6 +45,6 @@ export default defineComponent({
 }
 
 .visible {
-  background: rgb(62, 41, 74);
+  background: rgba(62, 41, 74, 1);
 }
 </style>

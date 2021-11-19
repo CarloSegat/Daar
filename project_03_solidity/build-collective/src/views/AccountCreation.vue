@@ -53,7 +53,10 @@
 
         </card>
       </form>
-      <MemberList :members="Array.from(this.members)"></MemberList>
+      <MemberList
+          :members="Array.from(this.members)">
+          title="Members added so far"
+      </MemberList>
 
     </div>
 

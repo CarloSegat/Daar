@@ -82,7 +82,9 @@ Implement an OpenCollective from scratch in Solidity.
 Each project has a balance, a name and a list of contributors. 
 Each project belongs to a user or an entreprise. 
 The money given to the project can be send to contributors, and contributors only.
-- On a project, you should be able to create bounties. Bounties are bugs with a reward: if you spot a bug and you want to have it fix quickly, open a bounty and put some eth on it. When the fix is pushed, the author will get the eth. He’s a bounty hunter.
+- On a project, you should be able to create bounties. Bounties are bugs with a reward: 
+if you spot a bug and you want to have it fix quickly, open a bounty and put some eth on it. 
+When the fix is pushed, the author will get the eth. He’s a bounty hunter.
 - Add the ability to put some link to commits from GitHub or GitLab in the projects, to keep a track of what has been done.
 
 # Front

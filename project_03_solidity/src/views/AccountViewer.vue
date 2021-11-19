@@ -1,7 +1,9 @@
 <template>
-  <SingleUserAccount v-if="!isEnterprise"></SingleUserAccount>
-  <EnterpriseAccount v-if="isEnterprise">Is enterprise</EnterpriseAccount>
-  <Projects></Projects>
+  <div class="container">
+    <SingleUserAccount v-if="!isEnterprise"></SingleUserAccount>
+    <EnterpriseAccount v-if="isEnterprise">Is enterprise</EnterpriseAccount>
+    <Projects></Projects>
+  </div>
 
 </template>
 
@@ -13,7 +15,7 @@ import EnterpriseAccount from "@/components/EnterpriseAccount.vue";
 import Projects from "@/components/Projects.vue";
 
 export default defineComponent({
-  components: { SingleUserAccount, EnterpriseAccount, Projects },
+  components: {SingleUserAccount, EnterpriseAccount, Projects},
   setup() {
     console.log("setting up")
     const store = useStore()
@@ -22,10 +24,15 @@ export default defineComponent({
     const balance = computed(() => store.state.account.balance)
     const account = computed(() => store.state.account)
     const isEnterprise = computed(() => store.state.registrationStatus.isEnterprise)
-    const fetchRegistrationRecord =() => store.dispatch("fetchRegistrationRecord")
+    const fetchRegistrationRecord = () => store.dispatch("fetchRegistrationRecord")
     return {address, contract, balance, account, isEnterprise, fetchRegistrationRecord}
   },
-
+  async mounted() {
+    await this.fetchRegistrationRecord();
+    console.log("Account Viewer mounted, isEnterpris: ", this.isEnterprise)
+    // const account = await contract.methods.user(address).call()
+    // if (account.registered) this.account = account
+  },
   methods: {
     async updateAccount() {
       const {address, contract} = this
@@ -36,17 +43,15 @@ export default defineComponent({
       const {contract} = this
       await contract.methods.addBalance(200).send()
       await this.updateAccount()
-    },
-    async mounted() {
-      await this.fetchRegistrationRecord();
-      console.log("Account Viewer mounted")
-      // const account = await contract.methods.user(address).call()
-      // if (account.registered) this.account = account
     }
   },
 })
 </script>
 
 <style lang="css" scoped>
+
+.container {
+  padding: 2rem;
+}
 
 </style>

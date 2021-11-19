@@ -53,7 +53,9 @@
 
         </card>
       </form>
-      <MemberList :members="Array.from(this.members)"></MemberList>
+      <MemberList
+          :members="Array.from(this.members)"
+          title="Members added so far:"></MemberList>
 
     </div>
 
@@ -99,7 +101,7 @@ export default defineComponent({
       const members = Array.from(this.members)
       console.log("members: ", members)
       console.log("members at creation time: ", {name, members, initialBalance})
-      await contract.methods.signUpEnterprise(name, members, 0).send()
+      await contract.methods.signUpEnterprise(name, members, initialBalance).send()
       this.$router.push({name: 'AccountViewer'})
     },
 
