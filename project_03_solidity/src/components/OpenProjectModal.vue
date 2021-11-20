@@ -1,22 +1,32 @@
 <template>
-  <modal @close="this.$emit('closed')">
+  <modal @closed="this.$emit('close')">
+
 
     <template v-slot:header>
-      <h1>Project: {{ project.name }}</h1>
-      <div>Mission: {{ project.mission }}</div>
+      <card
+          :title="`Project: ${ project.name }`"
+          :subtitle="`Mission: ${ project.mission }`">
+        <div class="p1"> Owner: {{ project.owner }}</div>
+        <member-list
+            :members="project.members"
+            title="Members in this poject:"
+        ></member-list>
+      </card>
     </template>
 
     <template v-slot:subtitle>
-      <member-list
-          :members="project.members"
-          title="Members in this poject:"
-      ></member-list>
-      <div>Balance: {{ project.balance }}</div>
+
+
     </template>
+
 
     <template v-slot:body>
       <bounty-creation
           :project="this.project"></bounty-creation>
+      <bounty-list
+          :project="this.project"
+      ></bounty-list>
+
     </template>
 
   </modal>
@@ -28,17 +38,14 @@ import CollectiveButton from '@/components/CollectiveButton.vue'
 import MemberList from '@/components/MemberList.vue'
 import modal from '@/components/modal.vue'
 import BountyCreation from '@/components/BountyCreation.vue'
+import BountyList from '@/components/BountyList.vue'
+import Card from '@/components/Card.vue'
 import {useStore} from "vuex";
 
 export default defineComponent({
   name: 'openProjectModal',
-  components: {MemberList, modal, BountyCreation},
+  components: {MemberList, modal, BountyCreation, BountyList, Card},
   props: ['isOpen', 'project'],
-  setup() {
-    const store = useStore()
-    const contract = computed(() => store.state.contract)
-    return {contract}
-  },
 })
 </script>
 

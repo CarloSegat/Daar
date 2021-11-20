@@ -83,6 +83,7 @@ contract BuildCollective is Ownable {
 
     function createBounty(uint256 projectId,
         string memory description,
+        string memory title,
         uint8 weiBounty,
         string memory issueTrackerUrl) public returns (Model.Bounty memory bounty) {
 
@@ -92,8 +93,16 @@ contract BuildCollective is Ownable {
                 allowed = true;
             }
         }
+
         require(allowed);
-        bounty = Model.Bounty(msg.sender, description, issueTrackerUrl, weiBounty, projectId, true);
+
+        bounty = Model.Bounty(msg.sender,
+            description,
+            title,
+            issueTrackerUrl,
+            weiBounty,
+            projectId,
+            true);
         projectBountyMapping[projectId].push(bounty);
         emit BountyCreated(projectId, bounty);
     }

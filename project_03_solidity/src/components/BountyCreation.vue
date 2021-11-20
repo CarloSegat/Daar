@@ -4,6 +4,7 @@
       @submit.prevent="createBounty">
     <card title="Create Bounty"
           :blue="false"
+          subtitle="Insert bounty details: wei prize is the numeric field"
     >
       <div class="bounty-input-grid">
         <input
@@ -56,7 +57,8 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const contract = computed(() => store.state.contract);
-    return {contract}
+    const fetchBounties = (projectId: number) => store.dispatch('fetchBounties', {projectId});
+    return {contract, fetchBounties}
   },
   data() {
     const title = ''
@@ -67,18 +69,14 @@ export default defineComponent({
   },
   methods: {
     async createBounty() {
-      console.log("this.project.id,\n" +
-          "          description,\n" +
-          "          weiBounty,\n" +
-          "          urlTracker")
-      console.log(this.description, this.weiBounty, this.urlTracker)
       const r = await this.contract.methods.createBounty(
           this.project.id,
+          this.title,
           this.description,
           this.weiBounty,
           this.urlTracker
       ).send();
-      console.log("r: ", r);
+      this.fetchBounties(this.project.id)
     }
   }
 })

@@ -18,7 +18,8 @@ export default createStore({
             balance: 0,
             members: []
         },
-        projects: []
+        projects: [],
+        bounties: []
     },
     mutations: {
         updateEthereum(state, {address, contract, balance}) {
@@ -45,24 +46,21 @@ export default createStore({
         },
         updateProjects(state, projects){
             state.projects = projects;
+        },
+        updateBounties(state, bounties) {
+            state.bounties = bounties;
         }
     },
     actions: {
         async ethereumConnect(context) {
-            // console.log("context ", context)
             const response = await Ethereum.connect() // connect returns address & contract abi, NOT the userAccount!
-            // console.log("response from eth COnnect: ", response)
             if (response) {
                 const {address, contract, balance} = response
                 context.commit('updateEthereum', {address, contract, balance})
             }
         },
         async fetchRegistrationRecord(context) {
-            // console.log("ef")
             const contract = context.state.contract;
-            // console.log("contract.methods: ", contract.methods)
-            // console.log("context from store: ", context)
-            // console.log("context.state: ", context.state)
             if (contract !== null) {
                 const response = await contract.methods.getRegistrationRecord().call()
                 if (response) {
@@ -73,47 +71,42 @@ export default createStore({
             }
         },
         async fetchSingleUserAccount(context, { address }) {
-            console.log("fetchSingleUserAccount called w payload: ", address)
             const contract = context.state.contract;
-            // console.log("contract.methods: ", contract.methods)
-            // console.log("context from store: ", context)
-            // console.log("context.state: ", context.state)
             if (contract !== null) {
                 const response = await contract.methods.user(address).call()
                 if (response) {
                     const {username, registered, balance} = response
-                    console.log("{isEnterprise, registered}: ", {username, registered, balance})
                     context.commit('updateSingleUserAccount', {name: username, address, balance})
                 }
             }
         },
         async fetchEnterpriseAccount(context, { address }) {
-            console.log("fetchSingleUserAccount called w payload: ", address)
             const contract = context.state.contract;
-            // console.log("contract.methods: ", contract.methods)
-            // console.log("context from store: ", context)
-            // console.log("context.state: ", context.state)
             if (contract !== null) {
                 const response = await contract.methods.enterprise(address).call()
                 if (response) {
-                    console.log("fetchEnterpriseAccount response ", response)
                     const {name, registered, balance, members} = response
                     context.commit('updateEnterpriseAccount', {name, address, balance, members})
                 }
             }
         },
         async fetchProjects(context, { address }) {
-            console.log("fetchProjects called w payload: ", address)
             const contract = context.state.contract;
-            // console.log("contract.methods: ", contract.methods)
-            // console.log("context from store: ", context)
-            // console.log("context.state: ", context.state)
             if (contract !== null) {
                 const response = await contract.methods.fetchProjects(address).call()
                 if (response) {
-                    console.log("fetchProjects response ", response)
-                    // const {name, mission, balance, members, owner} = response
                     context.commit('updateProjects', response)
+                }
+            }
+        },
+        async fetchBounties(context, { projectId }) {
+            const contract = context.state.contract;
+            if (contract !== null) {
+                const response = await contract.methods.fetchBounties(projectId).call()
+                if (response) {
+                    console.log("fetchBounties response ", response)
+                    // const {name, mission, balance, members, owner} = response
+                    context.commit('updateBounties', response)
                 }
             }
         },

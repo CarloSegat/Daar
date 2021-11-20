@@ -30,3 +30,4 @@ app.use(store)
     .mount('#app')
 
 app.mixin(globals)
+// app.config.compilerOptions.isCustomElement = card => card.startsWith('card')

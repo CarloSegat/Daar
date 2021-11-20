@@ -34,6 +34,7 @@ library Model {
     struct Bounty {
         address creator;
         string description;
+        string title;
         string issueTrackerUrl;
         uint8 weiBounty;
         uint256 projectId;
