@@ -26,9 +26,9 @@ contract BuildCollective is Ownable {
         return enterprises[enterpriseAddress];
     }
 
-    function signUp(string memory username) public returns (Model.User memory) {
+    function signUp(string memory username, uint256 initialBalance) public returns (Model.User memory) {
         require(bytes(username).length > 0);
-        users[msg.sender] = Model.User(msg.sender, username, 0, true);
+        users[msg.sender] = Model.User(msg.sender, username, initialBalance, true);
         emit UserSignedUp(msg.sender, users[msg.sender]);
         return users[msg.sender];
     }
@@ -61,9 +61,9 @@ contract BuildCollective is Ownable {
     //    return true;
     //  }
 
-    function createProject(string memory name, string memory mission, address[] memory members) public returns (Model.Project memory p) {
+    function createProject(string memory name, string memory mission, address[] memory contributors) public returns (Model.Project memory p) {
         require(users[msg.sender].registered || enterprises[msg.sender].registered);
-        p = Model.Project(name, mission, msg.sender, members, 0, getID());
+        p = Model.Project(name, mission, msg.sender, contributors, 0, getID());
         projects.push(p);
         ownerProjectCountMapping[msg.sender]++;
         emit ProjectCreated(msg.sender, p);
@@ -107,12 +107,39 @@ contract BuildCollective is Ownable {
         emit BountyCreated(projectId, bounty);
     }
 
-    function fetchBounties(uint256 projectId) public view returns(Model.Bounty[] memory bounties) {
+    function fetchBounties(uint256 projectId) public view returns (Model.Bounty[] memory bounties) {
         bounties = projectBountyMapping[projectId];
     }
 
     function getID() private returns (uint) {
         return ++ID_COUNTER;
+    }
+
+    function payProject(uint256 projectId) external payable {
+        //        require(msg.value >= 1 wei);
+        for (uint i = 0; i < projects.length; i++) {
+            if (projects[i].id == projectId) {
+                projects[i].balance += msg.value;
+            }
+        }
+    }
+
+    function payContributor(uint256 projectId, address contributor, uint256 amount) external {
+        uint projectIndex = 0;
+        bool projectHasFunds = false;
+        bool isCalledByProjectOwner = false;
+        for (uint i = 0; i < projects.length; i++) {
+            if (projects[i].id == projectId) {
+                isCalledByProjectOwner = projects[i].owner == msg.sender;
+                projectHasFunds = projects[i].balance >= amount;
+                projectIndex = i;
+            }
+        }
+        require(isCalledByProjectOwner);
+        require(projectHasFunds);
+        projects[projectIndex].balance -= amount;
+        address payable _contributor = address(uint160(contributor));
+        _contributor.transfer(amount);
     }
 
 }

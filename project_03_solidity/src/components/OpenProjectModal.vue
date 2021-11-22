@@ -1,22 +1,45 @@
 <template>
   <modal @closed="this.$emit('close')">
 
-
     <template v-slot:header>
       <card
           :title="`Project: ${ project.name }`"
           :subtitle="`Mission: ${ project.mission }`">
         <div class="p1"> Owner: {{ project.owner }}</div>
-        <member-list
-            :members="project.members"
-            title="Members in this poject:"
-        ></member-list>
+        <div class="p1"> Balance: {{ project.balance }}</div>
+
+
+        <div class="p1">
+          Contributors of the project
+          <ul id="example-1">
+            <li v-for="item in project.contributors" :key="item">
+              {{ item }}
+              <input
+                  @keydown.enter.prevent="() => {payContributor(item)}"
+                  type="number"
+                  v-model="payMemberAmount"
+                  class="input-username"
+                  placeholder="Pay member, type ammount"/>
+            </li>
+          </ul>
+        </div>
+
+
       </card>
     </template>
 
     <template v-slot:subtitle>
+      <div class="p1">
+        Add funds to this project, type amount and press enter (you will have to refresh to see changes)
+        <input
+            @keydown.enter.prevent="addTokens"
+            type="number"
+            class="input-username"
+            v-model="addWeiAmount"
+            placeholder="Add funds to this project"
+        />
 
-
+      </div>
     </template>
 
 
@@ -41,11 +64,36 @@ import BountyCreation from '@/components/BountyCreation.vue'
 import BountyList from '@/components/BountyList.vue'
 import Card from '@/components/Card.vue'
 import {useStore} from "vuex";
+import web3 from "web3";
 
 export default defineComponent({
   name: 'openProjectModal',
-  components: {MemberList, modal, BountyCreation, BountyList, Card},
+  components: {modal, BountyCreation, BountyList, Card},
   props: ['isOpen', 'project'],
+  setup() {
+    const store = useStore()
+    const address = computed(() => store.state.account.address)
+    const contract = computed(() => store.state.contract)
+    return {contract, address}
+  },
+  data() {
+    const addWeiAmount = 0;
+    const payMemberAmount = 0;
+    return {addWeiAmount, payMemberAmount}
+  },
+  methods: {
+    addTokens() {
+      const {contract} = this;
+      contract.methods.payProject(this.project.id)
+          .send({value: web3.utils.toBN("" + this.addWeiAmount)})
+    },
+    payContributor(contributorAddress: string) {
+       const {contract} = this;
+       contract.methods.payContributor(this.project.id, contributorAddress, this.payMemberAmount)
+          .send({value: web3.utils.toBN("" + this.addWeiAmount)})
+
+    }
+  }
 })
 </script>
 

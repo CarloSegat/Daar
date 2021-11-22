@@ -9,11 +9,20 @@
             subtitle="Type directly in the input and hit enter. All spaces will be converted to _"
         >
           <input
+              @keydown.enter.prevent=""
               type="text"
               class="input-username"
               v-model="username"
               placeholder="Type your username here"
           />
+          <input
+              @keydown.enter.prevent=""
+              type="number"
+              class="input-username"
+              v-model="initialBalancePrivate"
+              placeholder="Initial balance"
+          />
+          <SubmitButton></SubmitButton>
         </card>
       </form>
     </div>
@@ -81,17 +90,18 @@ export default defineComponent({
   },
   data() {
     const username = ''
+    const initialBalancePrivate = 0
     const usernameEnterprise = ''
     const members: string[] = []
     const initialBalance = 0
     const currentMember = ''
-    return {username, usernameEnterprise, members, initialBalance, currentMember}
+    return {username, initialBalancePrivate, usernameEnterprise, members, initialBalance, currentMember}
   },
   methods: {
     async signUpSingleUser() {
-      const {contract, username} = this
+      const {contract, username, initialBalancePrivate} = this
       const name = username.trim().replace(/ /g, '_')
-      await contract.methods.signUp(name).send()
+      await contract.methods.signUp(name, initialBalancePrivate).send()
       this.$router.push({name: 'AccountViewer'})
     },
 

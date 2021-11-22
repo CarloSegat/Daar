@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import {computed, defineComponent} from 'vue'
-import {useStore} from "vuex";
-import BountyViewer from '@/components/BountyViewer'
+import {useStore} from "vuex"
+import BountyViewer from "@/components/BountyViewer.vue";
 
 export default defineComponent({
   name: 'BountyList',

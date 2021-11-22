@@ -26,8 +26,8 @@ library Model {
         string name;
         string mission;
         address owner;
-        address[] members;
-        uint32 balance;
+        address[] contributors;
+        uint256 balance;
         uint256 id;
     }
 

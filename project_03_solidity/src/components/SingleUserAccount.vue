@@ -6,19 +6,6 @@
           :subtitle="`Personal account balance: \t\t${openCollectiveAccount.balance} Tokens`"
           :gradient="true"
       >
-        <div class="p1">
-          This data has been fetched from the blockchain. You started by
-          connecting MetaMask, and you fetched your data by reading the
-          blockchain. Try to modify the code to see what's happening!
-        </div>
-        <div class="p1">
-          On your account on the contract, you have
-          {{ openCollectiveAccount.balance }} tokens. If you click
-          <button class="button-link" @click="addTokens">here</button>
-          , you can
-          add some token to your account. Just give it a try! And think to put
-          an eye on Ganache!
-        </div>
       </card>
     </div>
   </div>

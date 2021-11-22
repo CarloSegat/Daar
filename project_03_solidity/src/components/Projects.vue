@@ -9,12 +9,13 @@
         v-for="(obj, index) in projects"
         :key="index"
         :title="`Project: ${obj.name}`"
-        :subtitle="`Owner: ${truncateEth(obj.owner)}`"
+        :subtitle="`Owner: ${truncateEth(obj.owner)} - Balance: ${obj.balance}`"
         @click="showModalSelectedProject(obj.id)"
     >
-      <div class="explanations"
+      <div class="p05"
       >Project mission: {{ obj.mission }}
       </div>
+
     </card>
 
     <div v-if="showModal">
@@ -58,7 +59,8 @@ export default defineComponent({
   async mounted() {
     this.connect();
     if (this.address) {
-      this.fetchProjects(this.address);
+      await this.fetchProjects(this.address);
+      console.log("fetched projects: ", this.projects)
     }
   },
 
