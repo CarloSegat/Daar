@@ -4,6 +4,7 @@
 .p2 {padding: 2rem;}
 .p3 {padding: 3rem;}
 .mb1 {margin-bottom: 1rem;}
+.ml1 {margin-left: 1rem;}
 
 /* GRID */
 .row1{grid-row-start: 1}
@@ -11,6 +12,12 @@
 .row3{grid-row-start: 3}
 .span2cols{grid-column: 1 / span 2;}
 .span3rows{grid-row: 1 / span 3}
+
+/* LAYPUT */
+.center-h {
+  display: block;
+  margin: auto;
+}
 
 
 /* COLORS */
@@ -61,12 +68,22 @@
 }
 /* END COLORS */
 
-.input-username {
+.input-full-line {
   background: transparent;
   border: none;
   padding: 12px;
   outline: none;
   width: 100%;
+  color: white;
+  font-family: inherit;
+  font-size: 1.3rem;
+}
+.input-not-full-line {
+  /*background: rgba(89, 25, 138, 0.5);*/
+  border: none;
+  border-radius: 2rem;
+  padding: 12px;
+  outline: none;
   color: white;
   font-family: inherit;
   font-size: 1.3rem;

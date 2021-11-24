@@ -15,7 +15,6 @@ export default createStore({
         openCollectiveAccount: {
             name: "",
             address: null,
-            balance: 0,
             members: []
         },
         projects: [],
@@ -36,12 +35,10 @@ export default createStore({
         updateSingleUserAccount(state, { name, address, balance}) {
             state.openCollectiveAccount.name = name
             state.openCollectiveAccount.address = address
-            state.openCollectiveAccount.balance = balance
         },
         updateEnterpriseAccount(state, { name, address, balance, members}) {
             state.openCollectiveAccount.name = name
             state.openCollectiveAccount.address = address
-            state.openCollectiveAccount.balance = balance
             state.openCollectiveAccount.members = members
         },
         updateProjects(state, projects){

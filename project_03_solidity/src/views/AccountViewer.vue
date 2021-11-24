@@ -39,7 +39,7 @@ export default defineComponent({
       this.account = await contract.methods.user(address).call()
     },
 
-    async addTokens() {
+    async payProject() {
       const {contract} = this
       await contract.methods.addBalance(200).send()
       await this.updateAccount()

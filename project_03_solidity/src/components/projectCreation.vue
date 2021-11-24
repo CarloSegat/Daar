@@ -9,21 +9,21 @@
         <input
             @keydown.enter.prevent=""
             type="text"
-            class="input-username row1"
+            class="input-full-line row1"
             v-model="projectName"
             placeholder="Type your project name"
         />
         <input
             @keydown.enter.prevent=""
             type="text"
-            class="input-username row2"
+            class="input-full-line row2"
             v-model="mission"
             placeholder="What is the project mission?"
         />
         <input
             @keydown.enter.prevent="addMember"
             type="text"
-            class="input-username row3"
+            class="input-full-line row3"
             v-model="currentMember"
             placeholder="Who are the members?"
         />
@@ -96,7 +96,7 @@ export default defineComponent({
   grid-gap: 0.24rem;
 }
 
-.input-username {
+.input-full-line {
   background: transparent;
   border: none;
   padding: 12px;

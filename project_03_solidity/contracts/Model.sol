@@ -5,14 +5,12 @@ library Model {
     struct User {
         address userAddress;
         string username;
-        uint256 balance;
         bool registered;
     }
 
     struct Enterprise {
         string name;
         address owner;
-        uint256 balance;
         address[] members;
         bool registered;
     }

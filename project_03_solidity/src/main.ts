@@ -18,9 +18,14 @@ function truncateEth(address: string, _len: number) {
     return prefix + '...' + suffix;
 }
 
+function weiToEth(wei:number){
+    return wei / (10**18);
+}
+
 const globals = {
     methods: {
         "truncateEth": truncateEth,
+        "weiToEth": weiToEth
     },
 }
 

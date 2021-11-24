@@ -11,16 +11,9 @@
           <input
               @keydown.enter.prevent=""
               type="text"
-              class="input-username"
+              class="input-full-line"
               v-model="username"
               placeholder="Type your username here"
-          />
-          <input
-              @keydown.enter.prevent=""
-              type="number"
-              class="input-username"
-              v-model="initialBalancePrivate"
-              placeholder="Initial balance"
           />
           <SubmitButton></SubmitButton>
         </card>
@@ -38,7 +31,7 @@
               @keydown.enter.prevent=""
               id="enterprise-name"
               type="text"
-              class="input-username"
+              class="input-full-line"
               v-model="usernameEnterprise"
               placeholder="Type enterprise account name"
           />
@@ -46,17 +39,9 @@
               @keydown.enter.prevent="addMember"
               id="member"
               type="text"
-              class="input-username"
+              class="input-full-line"
               v-model="currentMember"
               placeholder="Add member"
-          />
-          <input
-              @keydown.enter.prevent=""
-              id="initial-balance"
-              type="number"
-              class="input-username"
-              v-model="initialBalance"
-              placeholder="Type initial balance for the enterprise account"
           />
           <SubmitButton></SubmitButton>
 
@@ -101,7 +86,7 @@ export default defineComponent({
     async signUpSingleUser() {
       const {contract, username, initialBalancePrivate} = this
       const name = username.trim().replace(/ /g, '_')
-      await contract.methods.signUp(name, initialBalancePrivate).send()
+      await contract.methods.signUp(name).send()
       this.$router.push({name: 'AccountViewer'})
     },
 
@@ -111,7 +96,7 @@ export default defineComponent({
       const members = Array.from(this.members)
       console.log("members: ", members)
       console.log("members at creation time: ", {name, members, initialBalance})
-      await contract.methods.signUpEnterprise(name, members, initialBalance).send()
+      await contract.methods.signUpEnterprise(name, members).send()
       this.$router.push({name: 'AccountViewer'})
     },
 
@@ -144,7 +129,7 @@ export default defineComponent({
   grid-gap: 24px;
 }
 
-.input-username {
+.input-full-line {
   background: transparent;
   border: none;
   padding: 12px;

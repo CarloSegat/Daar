@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-mask" @keydown.esc="$emit('close')">
+    <div class="modal-mask" @keydown.esc="$emit('closed')" ref="modal" tabindex="0">
       <div class="modal-wrapper">
         <div class="modal-container blue p1">
           <div class="modal-header">
@@ -36,7 +36,10 @@ import CollectiveButton from '@/components/CollectiveButton.vue'
 
 export default defineComponent({
   name: 'modal',
-  components: {CollectiveButton}
+  components: { CollectiveButton },
+  mounted() {
+    this.$refs.modal.focus()
+  }
 })
 </script>
 

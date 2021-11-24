@@ -1,45 +1,45 @@
 <template>
   <modal @closed="this.$emit('close')">
 
+    <!-- PROJECT DETAILS -->
     <template v-slot:header>
       <card
           :title="`Project: ${ project.name }`"
           :subtitle="`Mission: ${ project.mission }`">
-        <div class="p1"> Owner: {{ project.owner }}</div>
-        <div class="p1"> Balance: {{ project.balance }}</div>
+        <div class="p05"> Owner: {{ project.owner }}</div>
+        <div class="p05"> Balance: {{ project.balance }}</div>
 
-
-        <div class="p1">
-          Contributors of the project
+        <div class="p05">
+          Contributors of the project, to pay them simply type the amount and press enter :)
           <ul id="example-1">
             <li v-for="item in project.contributors" :key="item">
-              {{ item }}
+              <span>{{ item }}</span>
               <input
                   @keydown.enter.prevent="() => {payContributor(item)}"
                   type="number"
                   v-model="payMemberAmount"
-                  class="input-username"
+                  class="input-not-full-line ml1 violet"
                   placeholder="Pay member, type ammount"/>
             </li>
           </ul>
         </div>
 
-
       </card>
     </template>
 
+
+    <!--  ADD FUNDS TO PROJECT  -->
     <template v-slot:subtitle>
       <div class="p1">
         Add funds to this project, type amount and press enter (you will have to refresh to see changes)
-        <input
-            @keydown.enter.prevent="addTokens"
-            type="number"
-            class="input-username"
-            v-model="addWeiAmount"
-            placeholder="Add funds to this project"
-        />
-
       </div>
+      <input
+          @keydown.enter.prevent="payProject"
+          type="number"
+          class="input-not-full-line violet center-h"
+          v-model="ethAmmountToAdd"
+          placeholder="Add funds to this project"
+      />
     </template>
 
 
@@ -77,20 +77,29 @@ export default defineComponent({
     return {contract, address}
   },
   data() {
-    const addWeiAmount = 0;
+    const ethAmmountToAdd = 0;
     const payMemberAmount = 0;
-    return {addWeiAmount, payMemberAmount}
+    return {ethAmmountToAdd, payMemberAmount}
   },
   methods: {
-    addTokens() {
+    // when you put funds on a project the eth is taken from your account
+    payProject() {
       const {contract} = this;
+
       contract.methods.payProject(this.project.id)
-          .send({value: web3.utils.toBN("" + this.addWeiAmount)})
+          .send({
+            from: this.address,
+            value: web3.utils.toWei(
+                web3.utils.toBN("" + this.ethAmmountToAdd),
+                "ether") //web3.utils.toBN("" + this.addWeiAmount)
+          })
     },
+    // when you pay a contributor, eth it's taken from the project balance
     payContributor(contributorAddress: string) {
-       const {contract} = this;
-       contract.methods.payContributor(this.project.id, contributorAddress, this.payMemberAmount)
-          .send({value: web3.utils.toBN("" + this.addWeiAmount)})
+      const {contract} = this;
+      console.log("paying ", contributorAddress)
+      contract.methods.payContributor(this.project.id, contributorAddress, this.payMemberAmount)
+          .send()
 
     }
   }

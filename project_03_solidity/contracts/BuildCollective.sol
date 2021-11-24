@@ -18,6 +18,9 @@ contract BuildCollective is Ownable {
     mapping(uint256 => Model.Bounty[]) private projectBountyMapping;
     uint private ID_COUNTER = 0;
 
+    function() external payable {
+    }
+
     function user(address userAddress) public view returns (Model.User memory) {
         return users[userAddress];
     }
@@ -26,27 +29,18 @@ contract BuildCollective is Ownable {
         return enterprises[enterpriseAddress];
     }
 
-    function signUp(string memory username, uint256 initialBalance) public returns (Model.User memory) {
+    function signUp(string memory username) public returns (Model.User memory) {
         require(bytes(username).length > 0);
-        users[msg.sender] = Model.User(msg.sender, username, initialBalance, true);
+        users[msg.sender] = Model.User(msg.sender, username, true);
         emit UserSignedUp(msg.sender, users[msg.sender]);
         return users[msg.sender];
     }
 
-    function signUpEnterprise(
-        string memory enterpriseName,
-        address[] memory members,
-        uint256 balance) public returns (Model.Enterprise memory) {
+    function signUpEnterprise(string memory enterpriseName, address[] memory members) public returns (Model.Enterprise memory) {
         require(bytes(enterpriseName).length > 0);
-        enterprises[msg.sender] = Model.Enterprise(enterpriseName, msg.sender, balance, members, true);
+        enterprises[msg.sender] = Model.Enterprise(enterpriseName, msg.sender, members, true);
         emit EnterpriseSignedUp(msg.sender, enterprises[msg.sender]);
         return enterprises[msg.sender];
-    }
-
-    function addBalance(uint256 amount) public returns (bool) {
-        require(users[msg.sender].registered || enterprises[msg.sender].registered);
-        users[msg.sender].balance += amount;
-        return true;
     }
 
     function getRegistrationRecord() public view returns (Model.RegistrationRecord memory rr){
@@ -54,12 +48,6 @@ contract BuildCollective is Ownable {
         rr.registered = users[msg.sender].registered || enterprises[msg.sender].registered;
         rr.isEnterprise = enterprises[msg.sender].registered;
     }
-
-    //  function addBalanceEnterprise(uint256 amount) public returns (bool) {
-    //    require(enterprises[msg.sender].registered);
-    //    enterprises[msg.sender].balance += amount;
-    //    return true;
-    //  }
 
     function createProject(string memory name, string memory mission, address[] memory contributors) public returns (Model.Project memory p) {
         require(users[msg.sender].registered || enterprises[msg.sender].registered);
@@ -111,12 +99,10 @@ contract BuildCollective is Ownable {
         bounties = projectBountyMapping[projectId];
     }
 
-    function getID() private returns (uint) {
-        return ++ID_COUNTER;
-    }
+
 
     function payProject(uint256 projectId) external payable {
-        //        require(msg.value >= 1 wei);
+        require(msg.value >= 1 wei);
         for (uint i = 0; i < projects.length; i++) {
             if (projects[i].id == projectId) {
                 projects[i].balance += msg.value;
@@ -137,9 +123,17 @@ contract BuildCollective is Ownable {
         }
         require(isCalledByProjectOwner);
         require(projectHasFunds);
-        projects[projectIndex].balance -= amount;
-        address payable _contributor = address(uint160(contributor));
-        _contributor.transfer(amount);
+        projects[projectIndex].balance -= amount * (1 ether);
+        address payable payable_contributor = address(uint160(contributor));
+        payable_contributor.transfer(amount * (1 ether));
+    }
+
+    function getTotalBalance() public view returns (uint256 totalBalance){
+        totalBalance = address(this).balance;
+    }
+
+    function getID() private returns (uint) {
+        return ++ID_COUNTER;
     }
 
 }

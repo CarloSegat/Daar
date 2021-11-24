@@ -3,7 +3,7 @@
     <div class="card-home-wrapper">
       <card
           :title="`Enterprise name: ${openCollectiveAccount.name}`"
-          :subtitle="`The balance on your enterprise account is: \t\t${openCollectiveAccount.balance}`"
+          :subtitle="`Your eth balance is: \t\t${this.balance}`"
           :gradient="true"
           :blue="true"
       >
@@ -33,10 +33,11 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const address = computed(() => store.state.account.address)
+    const balance = computed(() => store.state.account.balance)
     const contract = computed(() => store.state.contract)
     const openCollectiveAccount = computed(() => store.state.openCollectiveAccount)
     const fetchEnterpriseAccount = (address: string) => store.dispatch("fetchEnterpriseAccount", {address})
-    return {address, contract, fetchEnterpriseAccount, openCollectiveAccount}
+    return {address, balance, contract, fetchEnterpriseAccount, openCollectiveAccount}
   },
 
   async mounted() {

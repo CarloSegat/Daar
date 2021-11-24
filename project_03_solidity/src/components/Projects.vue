@@ -9,7 +9,7 @@
         v-for="(obj, index) in projects"
         :key="index"
         :title="`Project: ${obj.name}`"
-        :subtitle="`Owner: ${truncateEth(obj.owner)} - Balance: ${obj.balance}`"
+        :subtitle="`Owner: ${truncateEth(obj.owner)} - Balance: ${weiToEth(obj.balance)}`"
         @click="showModalSelectedProject(obj.id)"
     >
       <div class="p05"
@@ -17,6 +17,7 @@
       </div>
 
     </card>
+    <button @click="logTotalAmount">[debug] GET TOTAL ETH STORED ON CONTRACT</button>
 
     <div v-if="showModal">
       <open-project-modal
@@ -68,6 +69,9 @@ export default defineComponent({
     showModalSelectedProject(id: number) {
       this.showModal = true;
       this.selectedProject = id;
+    },
+    async logTotalAmount() {
+      console.log(await this.contract.methods.getTotalBalance().call())
     }
   }
 })
@@ -92,7 +96,7 @@ export default defineComponent({
   padding: 12px;
 }
 
-.input-username {
+.input-full-line {
   background: transparent;
   border: none;
   padding: 12px;

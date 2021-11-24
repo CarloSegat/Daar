@@ -6,7 +6,7 @@
       Prize: {{bounty.weiBounty}} wei
     </div>
     <div
-    :class="`p05 ${bounty.isOpen ? 'bg-green' : 'bg-red'}`">
+    :class="`p05 ${bounty.isOpen ? 'bg-red': 'bg-green'}`">
       Status: {{ bounty.isOpen ? "Open" : "Closed"}}
     </div>
   </card>

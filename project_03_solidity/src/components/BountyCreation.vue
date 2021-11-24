@@ -10,28 +10,28 @@
         <input
             @keydown.enter.prevent=""
             type="number"
-            class="input-username"
-            v-model="weiBounty"
+            class="input-full-line"
+            v-model="ethBounty"
             placeholder="Wei Bounty"
         />
         <input
             @keydown.enter.prevent=""
             type="text"
-            class="input-username"
+            class="input-full-line"
             v-model="title"
             placeholder="Bounty's title"
         />
         <input
             @keydown.enter.prevent=""
             type="text"
-            class="input-username"
+            class="input-full-line"
             v-model="description"
             placeholder="Description"
         />
         <input
             @keydown.enter.prevent=""
             type="text"
-            class="input-username"
+            class="input-full-line"
             v-model="urlTracker"
             placeholder="URL to issue tracker (e.g. GitLab)"
         />
@@ -65,15 +65,15 @@ export default defineComponent({
     const description = ''
     const urlTracker = ''
     const weiBounty = 0;
-    return {title, description, urlTracker, weiBounty }
+    return {title, description, urlTracker, ethBounty: weiBounty }
   },
   methods: {
     async createBounty() {
       const r = await this.contract.methods.createBounty(
           this.project.id,
-          this.title,
           this.description,
-          this.weiBounty,
+          this.title,
+          this.ethBounty,
           this.urlTracker
       ).send();
       this.fetchBounties(this.project.id)
@@ -90,7 +90,7 @@ export default defineComponent({
   grid-gap: 0.24rem;
 }
 
-.input-username {
+.input-full-line {
   background: transparent;
   border: none;
   padding: 12px;
