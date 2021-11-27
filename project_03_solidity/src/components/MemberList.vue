@@ -3,7 +3,7 @@
     {{ title }}
     <ul id="example-1">
       <li v-for="item in members" :key="item">
-        {{ item }}
+        {{ truncateEth(item) }}
       </li>
     </ul>
   </div>
