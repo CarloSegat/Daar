@@ -71,7 +71,15 @@ export default defineComponent({
     const address = computed(() => store.state.account.address)
     const balance = computed(() => store.state.account.balance)
     const contract = computed(() => store.state.contract)
-    return {address, contract, balance}
+    const registrationStatus = computed( () => store.state.registrationStatus)
+    const fetchRegistrationRecord = () => store.dispatch("fetchRegistrationRecord");
+    return {address, contract, balance, fetchRegistrationRecord, registrationStatus}
+  },
+  async mounted() {
+    await this.fetchRegistrationRecord();
+    if(this.registrationStatus.registered){
+      this.$router.push({name: "AccountViewer"})
+    }
   },
   data() {
     const username = ''

@@ -50,6 +50,7 @@ import {computed, defineComponent} from 'vue'
 import {useStore} from "vuex";
 import Card from "@/components/Card.vue";
 import SubmitButton from "@/components/SubmitButton.vue";
+import web3 from 'web3';
 
 export default defineComponent({
   name: 'BountyCreation',
@@ -77,13 +78,10 @@ export default defineComponent({
           this.projectId,
           this.description,
           this.title,
-          this.convertEthToWei(this.ethBounty),
+          web3.utils.toWei(this.ethBounty, 'ether'),
           this.urlTracker
       ).send();
       this.fetchBounties(this.projectId)
-    },
-    convertEthToWei(eth: string) {
-      return Number.parseFloat(eth.replace(',', '.')) * (10 ** 18)
     }
   }
 })

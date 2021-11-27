@@ -1,33 +1,34 @@
 <template>
-    <div class="modal-mask" @keydown.esc="$emit('closed')" ref="modal" tabindex="0">
-      <div class="modal-wrapper">
-        <div class="modal-container blue p1">
-          <div class="modal-header">
-            <slot name="header">
-            </slot>
-          </div>
+  <div class="modal-mask" @keydown.esc="$emit('closed')" ref="modal" tabindex="0">
+    <div class="modal-wrapper">
+      <div class="modal-container blue p1">
+        <div class="modal-header">
+          <slot name="header">
+          </slot>
+        </div>
 
-          <div class="modal-body">
-            <slot name="subtitle">
-            </slot>
-          </div>
+        <div class="modal-body">
+          <slot name="subtitle">
+          </slot>
+        </div>
 
-          <div class="modal-body">
-            <slot name="body">
-            </slot>
-          </div>
+        <div class="modal-body">
+          <slot name="body">
+          </slot>
+        </div>
 
-          <div class="modal-footer">
-            <slot name="footer">
+        <div class="modal-footer">
+          <slot name="footer">
 
-                <collective-button @click="$emit('closed')" :transparent="false">
-                  CLOSE
-                </collective-button>
-            </slot>
-          </div>
+            <collective-button
+                @collectiveClick="$emit('closed')" :transparent="false">
+              CLOSE
+            </collective-button>
+          </slot>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -36,7 +37,7 @@ import CollectiveButton from '@/components/CollectiveButton.vue'
 
 export default defineComponent({
   name: 'modal',
-  components: { CollectiveButton },
+  components: {CollectiveButton},
   mounted() {
     this.$refs.modal.focus()
   }
@@ -74,6 +75,13 @@ export default defineComponent({
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
+}
+
+.modal-footer {
+  bottom: 2rem;
+  position: absolute;
+  right: 2rem;
+  width: fit-content;
 }
 
 .modal-body {

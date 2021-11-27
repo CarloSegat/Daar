@@ -9,13 +9,11 @@ contract BuildCollective is Ownable {
     event UserSignedUp(address indexed userAddress, Model.User user);
     event EnterpriseSignedUp(address indexed ownerAddress, Model.Enterprise enterprise);
     event ProjectCreated(address indexed creatorAddress, Model.Project enterprise);
-    event BountyCreated(uint256 indexed projectId, Model.Bounty enterprise);
 
     mapping(address => Model.User) private users;
     mapping(address => Model.Enterprise) private enterprises;
     mapping(address => uint16) private ownerProjectCountMapping;
     Model.Project[] private projects;
-    mapping(uint256 => Model.Bounty[]) private projectBountyMapping;
     uint private ID_COUNTER = 0;
 
     function() external payable {
@@ -45,13 +43,13 @@ contract BuildCollective is Ownable {
 
     function getRegistrationRecord() public view returns (Model.RegistrationRecord memory rr){
         rr = Model.RegistrationRecord(false, false);
-        rr.registered = users[msg.sender].registered || enterprises[msg.sender].registered;
+        rr.registered = _isRegistered(msg.sender);
         rr.isEnterprise = enterprises[msg.sender].registered;
     }
 
     function createProject(string memory name, string memory mission, address[] memory contributors) public returns (Model.Project memory p) {
-        require(users[msg.sender].registered || enterprises[msg.sender].registered);
-        p = Model.Project(name, mission, msg.sender, contributors, 0, getID());
+        require(_isRegistered(msg.sender));
+        p = Model.Project(name, mission, msg.sender, contributors, 0, 0, _getID());
         projects.push(p);
         ownerProjectCountMapping[msg.sender]++;
         emit ProjectCreated(msg.sender, p);
@@ -68,38 +66,6 @@ contract BuildCollective is Ownable {
         }
         return result;
     }
-
-    function createBounty(uint256 projectId,
-        string memory description,
-        string memory title,
-        uint64 weiBounty,
-        string memory issueTrackerUrl) public returns (Model.Bounty memory bounty) {
-
-        bool allowed = false;
-        for (uint i = 0; i < projects.length; i++) {
-            if (projects[i].id == projectId && projects[i].owner == msg.sender) {
-                allowed = true;
-            }
-        }
-
-        require(allowed);
-
-        bounty = Model.Bounty(msg.sender,
-            description,
-            title,
-            issueTrackerUrl,
-            weiBounty,
-            projectId,
-            true);
-        projectBountyMapping[projectId].push(bounty);
-        emit BountyCreated(projectId, bounty);
-    }
-
-    function fetchBounties(uint256 projectId) public view returns (Model.Bounty[] memory bounties) {
-        bounties = projectBountyMapping[projectId];
-    }
-
-
 
     function payProject(uint256 projectId) external payable {
         require(msg.value >= 1 wei);
@@ -132,12 +98,28 @@ contract BuildCollective is Ownable {
         totalBalance = address(this).balance;
     }
 
-    function getID() private returns (uint) {
+
+    function fetchAllProjects() public view returns (Model.Project[] memory _projects) {
+        _projects = projects;
+    }
+
+    function _findProject(uint projectId) internal returns (Model.Project memory) {
+        for (uint i = 0; i < projects.length; i++) {
+            if (projects[i].id == projectId) {
+                return projects[i];
+            }
+        }
+        require(false, "The provided project ID does not exist");
+        return projects[0];
+    }
+
+
+    function _getID() internal returns (uint) {
         return ++ID_COUNTER;
     }
 
-    function fetchAllProjects() public view returns(Model.Project[] memory _projects) {
-        _projects = projects;
+    function _isRegistered(address msgSender) internal view returns(bool isRegistered){
+        isRegistered = users[msg.sender].registered || enterprises[msg.sender].registered;
     }
 
 }

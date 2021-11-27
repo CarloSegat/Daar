@@ -9,6 +9,7 @@
         v-for="(bounty, i) in bounties"
         :key="i"
         :bounty="bounty"
+        :projectId="projectId"
     >
     </bounty-viewer>
   </div>
@@ -17,7 +18,7 @@
 <script lang="ts">
 import {computed, defineComponent} from 'vue'
 import {useStore} from "vuex"
-import BountyViewer from "@/components/BountyViewer.vue";
+import BountyViewer from "@/components/bounty/BountyViewer.vue";
 
 export default defineComponent({
   name: 'BountyList',

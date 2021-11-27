@@ -1,5 +1,5 @@
-const BuildCollective = artifacts.require('BuildCollective')
+const Bounties = artifacts.require('Bounties')
 
 module.exports = function (deployer) {
-  deployer.deploy(BuildCollective)
+  deployer.deploy(Bounties)
 }

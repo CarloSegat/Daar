@@ -19,8 +19,8 @@
 <script lang="ts">
 import {defineComponent, computed} from 'vue'
 import modal from "@/components/modal.vue";
-import BountyCreation from "@/components/BountyCreation.vue";
-import BountyList from "@/components/BountyList.vue";
+import BountyCreation from "@/components/bounty/BountyCreation.vue";
+import BountyList from "@/components/bounty/BountyList.vue";
 import Card from "@/components/Card.vue";
 import web3 from 'web3';
 import {useStore} from "vuex";

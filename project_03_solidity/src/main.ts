@@ -39,16 +39,11 @@ function openSelectedProject(p: any, router: any) {
     })
 }
 
-function convertEthToWei(eth: string){
-    return Number.parseFloat(eth.replace(',', '.')) * (10**18)
-}
-
 const globals = {
     methods: {
         "truncateEth": truncateEth,
         "weiToEth": weiToEth,
         "openSelectedProject": openSelectedProject,
-        // "convertEthToWei": convertEthToWei
     },
 }
 
@@ -58,7 +53,3 @@ app.use(store)
     .mount('#app')
 
 app.mixin(globals)
-// app.config.compilerOptions.isCustomElement = card => card.startsWith('card')
-module.exports = {
-    convertEthToWei
-}

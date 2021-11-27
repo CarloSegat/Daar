@@ -1,5 +1,10 @@
 <template lang="html">
-  <button @click="$emit('click', $event)" class="button" :class="className">
+  <button
+    @mouseup.stop.prevent="(e) => {
+    clickCallback(e);
+    }"
+    class="button"
+          :class="className">
     <div class="button-body">
       <slot></slot>
     </div>
@@ -7,16 +12,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 
 export default defineComponent({
   name: 'CollectiveButton',
-  props: { transparent: Boolean },
+  props: {transparent: Boolean},
   computed: {
     className(): string {
       return this.transparent ? 'transparent' : 'visible'
     },
   },
+  methods: {
+    clickCallback(ev: any) {
+      console.log("collective button is being cliccker")
+      this.$emit('collectiveClick', ev)
+    }
+  }
 })
 </script>
 
@@ -34,6 +45,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   width: 100%;
+  border-radius: 1rem;
 }
 
 .button-body {

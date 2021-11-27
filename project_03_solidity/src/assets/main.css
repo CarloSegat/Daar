@@ -6,6 +6,10 @@
 .mb1 {margin-bottom: 1rem;}
 .ml1 {margin-left: 1rem;}
 
+.rounded {
+  border-radius: 1rem;
+}
+
 /* GRID */
 .row1{grid-row-start: 1}
 .row2{grid-row-start: 2 }

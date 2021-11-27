@@ -58,8 +58,8 @@
 <script lang="ts">
 import {defineComponent, computed} from 'vue'
 import modal from "@/components/modal.vue";
-import BountyCreation from "@/components/BountyCreation.vue";
-import BountyList from "@/components/BountyList.vue";
+import BountyCreation from "@/components/bounty/BountyCreation.vue";
+import BountyList from "@/components/bounty/BountyList.vue";
 import Card from "@/components/Card.vue";
 import web3 from 'web3';
 import {useStore} from "vuex";
@@ -78,20 +78,12 @@ export default defineComponent({
     const payMemberAmount = '0';
     return {ethAmmountToAdd, payMemberAmount}
   },
-  // mounted() {
-  //   console.log("address == $route.params.owner ", this.address == this.$route.params.owner)
-  //   console.log("address  ", this.address)
-  //   console.log("this.$route.params.owner  ", this.$route.params.owner)
-  // },
   methods: {
-     convertEthToWei(eth: string) {
-      return Number.parseFloat(eth.replace(',', '.')) * (10 ** 18)
-    },
     // when you put funds on a project the eth is taken from your account
     payProject() {
       const {contract} = this;
 
-      const w = this.convertEthToWei(this.ethAmmountToAdd)
+      const w = web3.utils.toWei(this.ethAmmountToAdd, 'ether')
 
       // web3.utils.toWei(
       //           web3.utils.toBN("" + this.ethAmmountToAdd),
@@ -106,7 +98,7 @@ export default defineComponent({
     // when you pay a contributor, eth it's taken from the project balance
     payContributor(contributorAddress: string) {
       const {contract} = this;
-      const w = this.convertEthToWei(this.payMemberAmount)
+      const w = web3.utils.toWei(this.payMemberAmount, 'ether');
       contract.methods.payContributor(this.$route.params.id, contributorAddress, w)
           .send()
     },

@@ -7,14 +7,14 @@
       subtitle="Please connect to use the app."
       :blue="true"
     >
-      <collective-button :transparent="true" @click="connect">
+      <collective-button :transparent="true" @collectiveClick="connect">
         Connect
       </collective-button>
     </card>
 
 <!--  if connected w metamask  -->
     <card title="You're connected!" subtitle="Hooray" :blue="true" v-else>
-      <collective-button :transparent="true" @click="goToAccount">
+      <collective-button :transparent="true" @collectiveClick="goToAccount">
         Go to account
       </collective-button>
     </card>

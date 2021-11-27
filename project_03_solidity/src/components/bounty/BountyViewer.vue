@@ -6,15 +6,18 @@
     <div class="p05">Created by: {{ truncateEth(bounty.creator) }}
     </div>
     <div class="p05">
-      Prize: {{ bounty.weiBounty }} wei
+      Prize: {{ weiToEth(bounty.weiBounty) }} ether
     </div>
     <div
         :class="`p05 ${bounty.isOpen ? 'bg-red': 'bg-green'}`">
       Status: {{ bounty.isOpen ? "Open" : "Closed" }}
     </div>
   </card>
-  <bounty-modal v-if="this.isOpenModal"
-                @closed="this.isOpenModal = false">
+  <bounty-modal
+      :bountyId="bounty.id"
+      :projectId='projectId'
+      v-if="this.isOpenModal"
+      @closed="this.isOpenModal = false">
   </bounty-modal>
 </template>
 
@@ -34,12 +37,12 @@ class Bounty {
 
 
 import Card from "@/components/Card.vue";
-import BountyModal from "@/components/BountyModal.vue";
+import BountyModal from "@/components/bounty/BountyModal.vue";
 
 export default defineComponent({
   name: 'BountyViewer',
   components: {Card, BountyModal},
-  props: ['bounty'],
+  props: ['bounty', 'projectId'],
   data() {
     const isOpenModal = false;
     return {isOpenModal}

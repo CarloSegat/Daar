@@ -26,16 +26,20 @@ library Model {
         address owner;
         address[] contributors;
         uint256 balance;
+        uint256 lockedBalance;
         uint256 id;
     }
 
     struct Bounty {
-        address creator;
-        string description;
         string title;
+        string description;
+        address creator;
         string issueTrackerUrl;
         uint64 weiBounty;
         uint256 projectId;
-        bool isOpen;
+        address assignee;
+        bool markerCompleted; // assignee has marker the bounty as completed, creator needs to check
+        bool isOpen; // creator has confirmed the bounty is finished
+        uint256 id;
     }
 }
