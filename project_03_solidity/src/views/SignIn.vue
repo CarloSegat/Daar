@@ -18,7 +18,6 @@
         Go to account
       </collective-button>
     </card>
-    <spacer :size="24" />
     <div class="home">
       <card
         v-for="(link, index) in links"
@@ -37,11 +36,10 @@ import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
 import Card from '@/components/Card.vue'
 import CollectiveButton from '@/components/CollectiveButton.vue'
-import Spacer from '@/components/Spacer.vue'
 
 export default defineComponent({
   name: 'SignIn',
-  components: { Card, CollectiveButton, Spacer },
+  components: { Card, CollectiveButton },
   setup() {
     // console.log("calling setup method from Signin.vue")
     const store = useStore()

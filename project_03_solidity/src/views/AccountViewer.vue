@@ -12,7 +12,7 @@ import {defineComponent, computed} from 'vue'
 import {useStore} from "vuex";
 import SingleUserAccount from '@/components/SingleUserAccount.vue'
 import EnterpriseAccount from "@/components/EnterpriseAccount.vue";
-import Projects from "@/components/Projects.vue";
+import Projects from "@/components/UserProjects.vue";
 
 export default defineComponent({
   components: {SingleUserAccount, EnterpriseAccount, Projects},

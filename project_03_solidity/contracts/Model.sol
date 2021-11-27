@@ -34,7 +34,7 @@ library Model {
         string description;
         string title;
         string issueTrackerUrl;
-        uint8 weiBounty;
+        uint64 weiBounty;
         uint256 projectId;
         bool isOpen;
     }

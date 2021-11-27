@@ -7,6 +7,9 @@
     <div class="navbar-items" v-if="store.state.account.address">
       <router-link to="/account" class="navbar-item">Account</router-link>
     </div>
+    <div class="navbar-items" v-if="store.state.account.address">
+      <router-link to="/all-projects" class="navbar-item">Projects</router-link>
+    </div>
   </nav>
   <router-view />
 </template>

@@ -72,7 +72,7 @@ contract BuildCollective is Ownable {
     function createBounty(uint256 projectId,
         string memory description,
         string memory title,
-        uint8 weiBounty,
+        uint64 weiBounty,
         string memory issueTrackerUrl) public returns (Model.Bounty memory bounty) {
 
         bool allowed = false;
@@ -110,22 +110,22 @@ contract BuildCollective is Ownable {
         }
     }
 
-    function payContributor(uint256 projectId, address contributor, uint256 amount) external {
+    function payContributor(uint256 projectId, address contributor, uint256 amountWei) external {
         uint projectIndex = 0;
         bool projectHasFunds = false;
         bool isCalledByProjectOwner = false;
         for (uint i = 0; i < projects.length; i++) {
             if (projects[i].id == projectId) {
                 isCalledByProjectOwner = projects[i].owner == msg.sender;
-                projectHasFunds = projects[i].balance >= amount;
+                projectHasFunds = projects[i].balance >= amountWei;
                 projectIndex = i;
             }
         }
         require(isCalledByProjectOwner);
         require(projectHasFunds);
-        projects[projectIndex].balance -= amount * (1 ether);
+        projects[projectIndex].balance -= amountWei;
         address payable payable_contributor = address(uint160(contributor));
-        payable_contributor.transfer(amount * (1 ether));
+        payable_contributor.transfer(amountWei);
     }
 
     function getTotalBalance() public view returns (uint256 totalBalance){
@@ -134,6 +134,10 @@ contract BuildCollective is Ownable {
 
     function getID() private returns (uint) {
         return ++ID_COUNTER;
+    }
+
+    function fetchAllProjects() public view returns(Model.Project[] memory _projects) {
+        _projects = projects;
     }
 
 }

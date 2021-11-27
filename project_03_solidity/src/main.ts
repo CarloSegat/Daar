@@ -18,14 +18,37 @@ function truncateEth(address: string, _len: number) {
     return prefix + '...' + suffix;
 }
 
-function weiToEth(wei:number){
-    return wei / (10**18);
+function weiToEth(wei: number) {
+    return wei / (10 ** 18);
+}
+
+function openSelectedProject(p: any, router: any) {
+
+    console.log("opening project ", p)
+
+   router.push({
+        name: 'SingleProjectView',
+        params: {
+            name: p.name,
+            mission: p.mission,
+            balance: p.balance,
+            id: p.id,
+            owner: p.owner,
+            contributors: p.contributors
+        }
+    })
+}
+
+function convertEthToWei(eth: string){
+    return Number.parseFloat(eth.replace(',', '.')) * (10**18)
 }
 
 const globals = {
     methods: {
         "truncateEth": truncateEth,
-        "weiToEth": weiToEth
+        "weiToEth": weiToEth,
+        "openSelectedProject": openSelectedProject,
+        // "convertEthToWei": convertEthToWei
     },
 }
 
@@ -36,3 +59,6 @@ app.use(store)
 
 app.mixin(globals)
 // app.config.compilerOptions.isCustomElement = card => card.startsWith('card')
+module.exports = {
+    convertEthToWei
+}

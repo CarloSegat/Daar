@@ -21,7 +21,7 @@ import BountyViewer from "@/components/BountyViewer.vue";
 
 export default defineComponent({
   name: 'BountyList',
-  props: ['project', 'cssClass'],
+  props: ['projectId', 'cssClass'],
   components: { BountyViewer },
   setup() {
     const store = useStore();
@@ -31,7 +31,7 @@ export default defineComponent({
   },
   async mounted() {
     console.log("fetching bounties")
-    await this.fetchBounties(this.project.id)
+    await this.fetchBounties(this.projectId)
   }
 })
 </script>

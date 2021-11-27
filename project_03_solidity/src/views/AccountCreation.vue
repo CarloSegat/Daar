@@ -41,7 +41,7 @@
               type="text"
               class="input-full-line"
               v-model="currentMember"
-              placeholder="Add member"
+              placeholder="Type and press enter to add member (eth address)"
           />
           <SubmitButton></SubmitButton>
 
@@ -120,13 +120,6 @@ export default defineComponent({
 
 .padding {
   padding: 1rem;
-}
-
-.home {
-  display: grid;
-  align-items: start;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 24px;
 }
 
 .input-full-line {

@@ -3,6 +3,7 @@ import * as Ethereum from '../services/ethereum'
 
 export default createStore({
     state: {
+        allProjects: [],
         contract: null,
         account: {
             address: null,
@@ -17,7 +18,6 @@ export default createStore({
             address: null,
             members: []
         },
-        projects: [],
         bounties: []
     },
     mutations: {
@@ -41,12 +41,12 @@ export default createStore({
             state.openCollectiveAccount.address = address
             state.openCollectiveAccount.members = members
         },
-        updateProjects(state, projects){
-            state.projects = projects;
-        },
         updateBounties(state, bounties) {
             state.bounties = bounties;
-        }
+        },
+        updateAllProjects(state, projects){
+            state.allProjects = projects;
+        },
     },
     actions: {
         async ethereumConnect(context) {
@@ -87,12 +87,13 @@ export default createStore({
                 }
             }
         },
-        async fetchProjects(context, { address }) {
+
+        async fetchAllProjects(context) {
             const contract = context.state.contract;
             if (contract !== null) {
-                const response = await contract.methods.fetchProjects(address).call()
+                const response = await contract.methods.fetchAllProjects().call()
                 if (response) {
-                    context.commit('updateProjects', response)
+                    context.commit('updateAllProjects', response)
                 }
             }
         },

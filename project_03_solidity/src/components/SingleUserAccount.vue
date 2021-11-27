@@ -39,15 +39,6 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.home {
-  padding: 24px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 500px;
-  margin: auto;
-}
 
 .button-link {
   display: inline;

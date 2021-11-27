@@ -37,6 +37,8 @@ export default {
   border-radius: 22px;
   padding: 2px;
   display: flex;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .card {

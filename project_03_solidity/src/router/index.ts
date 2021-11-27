@@ -9,6 +9,16 @@ const routes: Array<RouteRecordRaw> = [
         component: SignIn,
     },
     {
+        path: '/single-project',
+        name: 'SingleProjectView',
+        component: () => import('@/views/SingleProjectView.vue'),
+    },
+    {
+        path: '/all-projects',
+        name: 'AllProjects',
+        component: () => import('@/views/AllProjectsView.vue'),
+    },
+    {
         path: '/account',
         name: 'AccountCreation',
         component: () => import('@/views/AccountCreation.vue'),

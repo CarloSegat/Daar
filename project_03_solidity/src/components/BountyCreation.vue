@@ -6,14 +6,8 @@
           :blue="false"
           subtitle="Insert bounty details: wei prize is the numeric field"
     >
+
       <div class="bounty-input-grid">
-        <input
-            @keydown.enter.prevent=""
-            type="number"
-            class="input-full-line"
-            v-model="ethBounty"
-            placeholder="Wei Bounty"
-        />
         <input
             @keydown.enter.prevent=""
             type="text"
@@ -32,11 +26,18 @@
             @keydown.enter.prevent=""
             type="text"
             class="input-full-line"
+            v-model="ethBounty"
+            placeholder="Eth Bounty"
+        />
+        <input
+            @keydown.enter.prevent=""
+            type="text"
+            class="input-full-line"
             v-model="urlTracker"
             placeholder="URL to issue tracker (e.g. GitLab)"
         />
         <SubmitButton
-        class="span2cols"></SubmitButton>
+            class="span2cols"></SubmitButton>
 
       </div>
     </card>
@@ -52,7 +53,7 @@ import SubmitButton from "@/components/SubmitButton.vue";
 
 export default defineComponent({
   name: 'BountyCreation',
-  props: ['project'],
+  props: ['projectId'],
   components: {Card, SubmitButton},
   setup() {
     const store = useStore();
@@ -64,19 +65,25 @@ export default defineComponent({
     const title = ''
     const description = ''
     const urlTracker = ''
-    const weiBounty = 0;
-    return {title, description, urlTracker, ethBounty: weiBounty }
+    const weiBounty = '0';
+    return {title, description, urlTracker, ethBounty: weiBounty}
   },
   methods: {
     async createBounty() {
+      // console.log("this.ethBounty.replace('.', ',') ", this.ethBounty.replace(',', '.'))
+      // console.log("Number.parseFloat(this.ethBounty.replace('.', ',')) ", Number.parseFloat(this.ethBounty.replace('.', ',')))
+      // console.log("weiBounty ", weiBounty)
       const r = await this.contract.methods.createBounty(
-          this.project.id,
+          this.projectId,
           this.description,
           this.title,
-          this.ethBounty,
+          this.convertEthToWei(this.ethBounty),
           this.urlTracker
       ).send();
-      this.fetchBounties(this.project.id)
+      this.fetchBounties(this.projectId)
+    },
+    convertEthToWei(eth: string) {
+      return Number.parseFloat(eth.replace(',', '.')) * (10 ** 18)
     }
   }
 })
