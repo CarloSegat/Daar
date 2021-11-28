@@ -4,15 +4,6 @@ Welcome to the DAAR project. The idea will be to implement an OpenCollective com
 in a decentralized way, on Ethereum. This will have cool side effects, like not
 be forced to pay for servers.
 
-# Installation
-
-```bash
-# With HTTPS
-git clone https://github.com/ghivert/build-collective.git
-# Or with SSH
-git clone git@github.com:ghivert/build-collective.git
-```
-
 You’ll need to install dependencies. You’ll need [`Ganache`](https://www.trufflesuite.com/ganache), [`Node.js`](https://nodejs.org/en/) and [`NPM`](https://www.npmjs.com/) or [`Yarn`](https://yarnpkg.com/). You’ll need to install [`Metamask`](https://metamask.io/) as well to communicate with your blockchain.
 
 - `Ganache` is a local blockchain development, to iterate quickly and avoiding wasting Ether during development.

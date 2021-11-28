@@ -24,8 +24,6 @@ function weiToEth(wei: number) {
 
 function openSelectedProject(p: any, router: any) {
 
-    console.log("opening project ", p)
-
    router.push({
         name: 'SingleProjectView',
         params: {

@@ -36,7 +36,7 @@ class Bounty {
 }
 
 
-import Card from "@/components/Card.vue";
+import Card from "@/components/generic/Card.vue";
 import BountyModal from "@/components/bounty/BountyModal.vue";
 
 export default defineComponent({

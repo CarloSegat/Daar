@@ -9,7 +9,12 @@ import "./Model.sol";
 
 contract Bounties is BuildCollective {
 
-    event BountyCreated(uint256 indexed projectId, Model.Bounty enterprise);
+    event BountyCreated(uint256 indexed projectId, Model.Bounty bounty);
+    event BountyAssigned(uint256 indexed projectId, Model.Bounty bounty);
+    event BountyUnassigned(uint256 indexed projectId, address previousAssignee, Model.Bounty bounty);
+    event BountyMarkedCompleted(uint256 indexed projectId, Model.Bounty bounty);
+    event BountyClosed(uint256 indexed projectId, Model.Bounty bounty);
+    event BountyDeleted(uint256 indexed projectId, uint bountyId);
 
     mapping(uint256 => Model.Bounty[]) private projectBountyMapping;
 
@@ -19,12 +24,10 @@ contract Bounties is BuildCollective {
         uint64 weiBounty,
         string memory issueTrackerUrl) public returns (Model.Bounty memory bounty) {
 
-        Model.Project memory project = _findProject(projectId);
-        bool isOwner = project.owner == msg.sender;
-        bool hasEnoughEth = project.balance >= weiBounty;
+        Model.Project storage project = _findProject(projectId);
 
-        require(isOwner, "Only the project owner can create bounties");
-        require(hasEnoughEth, "You don't have enough balance on the project to create the bounty");
+        require(project.owner == msg.sender, "Only the project owner can create bounties");
+        require(project.balance >= weiBounty, "You don't have enough balance on the project to create the bounty");
 
         // lock the wei bounty
         project.lockedBalance += weiBounty;
@@ -49,45 +52,53 @@ contract Bounties is BuildCollective {
         bounties = projectBountyMapping[projectId];
     }
 
-    function assignMeToBounty(uint projectId, uint bountyId) public {
+    function assignMeToBounty(uint256 projectId, uint bountyId) public {
         require(_isRegistered(msg.sender), "You are not registered");
         Model.Bounty storage b = _findBounty(projectId, bountyId);
         b.assignee = msg.sender;
+        emit BountyAssigned(projectId, b);
     }
 
     function unAssignMeFromBounty(uint projectId, uint bountyId) public {
         require(_isRegistered(msg.sender));
-        Model.Bounty storage b = _findBounty(projectId, bountyId);
-        require(b.assignee == msg.sender, "Only the assignee can unassign themselves");
-        b.assignee = address(0);
+        Model.Bounty storage bounty = _findBounty(projectId, bountyId);
+        require(bounty.assignee == msg.sender, "Only the assignee can unassign themselves");
+        bounty.assignee = address(0);
+        emit BountyUnassigned(projectId, msg.sender, bounty);
     }
 
     function markBountyCompleted(uint projectId, uint bountyId, bool isCompleted) public {
         require(_isRegistered(msg.sender));
-        Model.Bounty storage b = _findBounty(projectId, bountyId);
-        require(b.assignee == msg.sender);
-        b.markerCompleted = isCompleted;
+        Model.Bounty storage bounty = _findBounty(projectId, bountyId);
+        require(bounty.assignee == msg.sender);
+        bounty.markerCompleted = isCompleted;
+        emit BountyMarkedCompleted(projectId, bounty);
     }
 
     function closeBounty(uint projectId, uint bountyId) public {
         require(_isRegistered(msg.sender), "User not registered");
-        Model.Project memory p = _findProject(projectId);
+        Model.Project storage p = _findProject(projectId);
         require(p.owner == msg.sender, "Only the project owner can confirm that a bounty has been completed");
         Model.Bounty storage bounty = _findBounty(projectId, bountyId);
         require(bounty.markerCompleted, "Only a completed bounty can be closed");
         bounty.isOpen = false;
 
+
         // pay prize to bounty hunter
-        address payable payable_assignee = address(uint160(bounty.assignee));
+        address payable payable_assignee = payable(address(uint160(bounty.assignee)));
         payable_assignee.transfer(bounty.weiBounty);
         p.lockedBalance -= bounty.weiBounty;
+
+        emit BountyClosed(projectId, bounty);
     }
 
     function deleteBounty(uint projectId, uint bountyId) public {
         require(_isRegistered(msg.sender));
-        Model.Project memory p = _findProject(projectId);
+        Model.Project memory p = _findProjectMemory(projectId);
         require(p.owner == msg.sender);
         _deleteBounty(projectId, bountyId);
+
+        emit BountyDeleted(projectId, bountyId);
     }
 
     function fetchBounty(uint projectId, uint bountyId) public view returns(Model.Bounty memory){

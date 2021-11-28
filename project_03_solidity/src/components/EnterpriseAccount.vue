@@ -24,7 +24,7 @@
 
 import {computed, defineComponent} from 'vue'
 import {useStore} from "vuex";
-import Card from "@/components/Card.vue";
+import Card from "@/components/generic/Card.vue";
 import MemberList from "@/components/MemberList.vue";
 
 export default defineComponent({
@@ -41,9 +41,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    const {address} = this
-    console.log("before calling fetch user acc")
-    await this.fetchEnterpriseAccount(address)
+    await this.fetchEnterpriseAccount(this.address)
   }
 
 })

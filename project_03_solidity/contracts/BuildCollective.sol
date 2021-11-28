@@ -8,16 +8,13 @@ contract BuildCollective is Ownable {
 
     event UserSignedUp(address indexed userAddress, Model.User user);
     event EnterpriseSignedUp(address indexed ownerAddress, Model.Enterprise enterprise);
-    event ProjectCreated(address indexed creatorAddress, Model.Project enterprise);
+    event ProjectCreated(address indexed creatorAddress, Model.Project project);
 
     mapping(address => Model.User) private users;
     mapping(address => Model.Enterprise) private enterprises;
     mapping(address => uint16) private ownerProjectCountMapping;
     Model.Project[] private projects;
     uint private ID_COUNTER = 0;
-
-    function() external payable {
-    }
 
     function user(address userAddress) public view returns (Model.User memory) {
         return users[userAddress];
@@ -90,7 +87,7 @@ contract BuildCollective is Ownable {
         require(isCalledByProjectOwner);
         require(projectHasFunds);
         projects[projectIndex].balance -= amountWei;
-        address payable payable_contributor = address(uint160(contributor));
+        address payable payable_contributor = payable(contributor);
         payable_contributor.transfer(amountWei);
     }
 
@@ -103,7 +100,17 @@ contract BuildCollective is Ownable {
         _projects = projects;
     }
 
-    function _findProject(uint projectId) internal returns (Model.Project memory) {
+    function _findProject(uint projectId) internal returns (Model.Project storage) {
+        for (uint i = 0; i < projects.length; i++) {
+            if (projects[i].id == projectId) {
+                return projects[i];
+            }
+        }
+        require(false, "The provided project ID does not exist");
+        return projects[0];
+    }
+
+    function _findProjectMemory(uint projectId) internal returns (Model.Project memory) {
         for (uint i = 0; i < projects.length; i++) {
             if (projects[i].id == projectId) {
                 return projects[i];

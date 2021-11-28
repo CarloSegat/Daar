@@ -1,9 +1,7 @@
 <template lang="html">
   <h3>Bounties:</h3>
-  <div :class="`p1 bounty-grid ${this.cssClass}`">
-
-<!--    <bounty-viewer :v-if="bounties.length > 0"-->
-<!--      :bounty="{'title': 'ifhiuiuhw', 'description': 'fwx efw ew f ex'}"></bounty-viewer>-->
+  <div
+      :class="`p1 bounty-grid ${this.cssClass}`">
     <bounty-viewer
         :v-if="bounties && bounties.length > 0"
         v-for="(bounty, i) in bounties"
@@ -23,24 +21,18 @@ import BountyViewer from "@/components/bounty/BountyViewer.vue";
 export default defineComponent({
   name: 'BountyList',
   props: ['projectId', 'cssClass'],
-  components: { BountyViewer },
+  components: {BountyViewer},
   setup() {
     const store = useStore();
     const bounties = computed(() => store.state.bounties);
-    const fetchBounties = (projectId: number) => store.dispatch('fetchBounties', { projectId })
+    const fetchBounties = (projectId: number) => store.dispatch('fetchBounties', {projectId})
     return {bounties, fetchBounties};
   },
   async mounted() {
-    console.log("fetching bounties")
     await this.fetchBounties(this.projectId)
   }
 })
 </script>
 
 <style lang="css">
-.bounty-grid {
-   display: grid;
-  grid-template-columns: 50% 50%;
-  grid-gap: 0.1rem;
-}
 </style>

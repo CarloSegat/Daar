@@ -38,11 +38,11 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useStore } from 'vuex'
-import Card from '@/components/Card.vue'
-import SubmitButton from '@/components/SubmitButton.vue'
-import modal from '@/components/modal.vue'
+import Card from '@/components/generic/Card.vue'
+import SubmitButton from '@/components/generic/SubmitButton.vue'
+import modal from '@/components/generic/Modal.vue'
 import MemberList from '@/components/MemberList.vue'
-import CollectiveButton from '@/components/CollectiveButton.vue'
+import CollectiveButton from '@/components/generic/CollectiveButton.vue'
 
 export default defineComponent({
   name: 'Projects',

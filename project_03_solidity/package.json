@@ -13,7 +13,9 @@
   },
   "watch": {
     "buildMigrate": {
-      "patterns": ["contracts"],
+      "patterns": [
+        "contracts"
+      ],
       "extensions": "sol",
       "legacyWatch": true,
       "delay": 1000,

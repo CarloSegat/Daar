@@ -62,7 +62,6 @@ export default createStore({
                 const response = await contract.methods.getRegistrationRecord().call()
                 if (response) {
                     const {isEnterprise, registered} = response
-                    // console.log("{isEnterprise, registered}: ", {isEnterprise, registered})
                     context.commit('updateRegistrationStatus', {isEnterprise, registered})
                 }
             }
@@ -103,7 +102,6 @@ export default createStore({
                 const response = await contract.methods.fetchBounties(projectId).call()
                 if (response) {
                     console.log("fetchBounties response ", response)
-                    // const {name, mission, balance, members, owner} = response
                     context.commit('updateBounties', response)
                 }
             }

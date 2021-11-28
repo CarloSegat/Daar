@@ -4,7 +4,7 @@
       @submit.prevent="createBounty">
     <card title="Create Bounty"
           :blue="false"
-          subtitle="Insert bounty details: wei prize is the numeric field"
+          subtitle="Insert bounty details: eth prize is the numeric field"
     >
 
       <div class="bounty-input-grid">
@@ -37,8 +37,8 @@
             placeholder="URL to issue tracker (e.g. GitLab)"
         />
         <SubmitButton
-            class="span2cols"></SubmitButton>
-
+            class="span2cols">
+        </SubmitButton>
       </div>
     </card>
   </form>
@@ -48,8 +48,8 @@
 
 import {computed, defineComponent} from 'vue'
 import {useStore} from "vuex";
-import Card from "@/components/Card.vue";
-import SubmitButton from "@/components/SubmitButton.vue";
+import Card from "@/components/generic/Card.vue";
+import SubmitButton from "@/components/generic/SubmitButton.vue";
 import web3 from 'web3';
 
 export default defineComponent({
@@ -71,9 +71,7 @@ export default defineComponent({
   },
   methods: {
     async createBounty() {
-      // console.log("this.ethBounty.replace('.', ',') ", this.ethBounty.replace(',', '.'))
-      // console.log("Number.parseFloat(this.ethBounty.replace('.', ',')) ", Number.parseFloat(this.ethBounty.replace('.', ',')))
-      // console.log("weiBounty ", weiBounty)
+
       const r = await this.contract.methods.createBounty(
           this.projectId,
           this.description,
@@ -95,14 +93,4 @@ export default defineComponent({
   grid-gap: 0.24rem;
 }
 
-.input-full-line {
-  background: transparent;
-  border: none;
-  padding: 12px;
-  outline: none;
-  width: 100%;
-  color: white;
-  font-family: inherit;
-  font-size: 1.3rem;
-}
 </style>

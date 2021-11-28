@@ -39,7 +39,6 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
     if (to.name !== 'SignIn' && !store.state.account.address) {
         next({name: 'SignIn'})
-        console.log("redirecting?")
     } else {
         next()
     }

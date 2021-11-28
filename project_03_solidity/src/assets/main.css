@@ -4,6 +4,7 @@
 .p2 {padding: 2rem;}
 .p3 {padding: 3rem;}
 .mb1 {margin-bottom: 1rem;}
+.mt1 {margin-top: 1rem;}
 .ml1 {margin-left: 1rem;}
 
 .rounded {
@@ -45,9 +46,7 @@
 .blue-gradient {
   background: linear-gradient(
     to bottom,
-    rgba(26, 18, 31, 0),
-    70%,
-    rgba(90, 90, 235, 0.5)
+    rgba(26, 18, 31, 0), 70%, rgba(90, 90, 235, 0.5)
   );
 }
 
@@ -58,9 +57,7 @@
 .gradient {
   background: linear-gradient(
     to bottom,
-    rgba(42, 28, 50, 1),
-    99%,
-    rgba(167, 79, 236, 0)
+    rgba(42, 28, 50, 1), 99%, rgba(167, 79, 236, 0)
   );
 }
 
@@ -91,21 +88,4 @@
   color: white;
   font-family: inherit;
   font-size: 1.3rem;
-}
-
-/*.home {*/
-/*  padding: 24px;*/
-/*  flex: 1;*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  justify-content: center;*/
-/*  max-width: 500px;*/
-/*  margin: auto;*/
-/*}*/
-
-.home {
-  display: grid;
-  align-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 24px;
 }

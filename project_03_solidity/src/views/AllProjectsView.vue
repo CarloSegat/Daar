@@ -1,5 +1,13 @@
 <template>
   <div class="home p05">
+    <h2>Welcome to Open Collective</h2>
+
+    <div>
+      The cumulative eth amount of all the projects currently on the platform is {{weiToEth(totalEth)}}
+    </div>
+
+    <h4>Find below all the projects currrently on the platform (including the ones you
+    have created!)</h4>
     <card
         v-for="(project, index) in this.allProjects"
         :key="index"
@@ -18,10 +26,10 @@
 
 <script lang="ts">
 import {defineComponent, computed} from 'vue'
-import modal from "@/components/modal.vue";
+import modal from "@/components/generic/Modal.vue";
 import BountyCreation from "@/components/bounty/BountyCreation.vue";
 import BountyList from "@/components/bounty/BountyList.vue";
-import Card from "@/components/Card.vue";
+import Card from "@/components/generic/Card.vue";
 import web3 from 'web3';
 import {useStore} from "vuex";
 
@@ -38,57 +46,12 @@ export default defineComponent({
   data() {
     const ethAmmountToAdd = 0;
     const payMemberAmount = 0;
-    return {ethAmmountToAdd, payMemberAmount}
+    const totalEth = 0;
+    return {ethAmmountToAdd, payMemberAmount, totalEth}
   },
-  mounted() {
+  async mounted() {
     this.fetchAllProjects();
+    this.totalEth = await this.contract.methods.getTotalBalance().call()
   }
 })
 </script>
-
-<style lang="css" scoped>
-
-.container {
-  padding: 2rem;
-}
-
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: table;
-  transition: opacity 0.3s ease;
-}
-
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-container {
-  width: 80%;
-  margin: 0px auto;
-  border-radius: 1rem 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
-.modal-body {
-  margin: 20px 0;
-}
-
-.modal-default-button {
-  float: right;
-}
-
-
-</style>

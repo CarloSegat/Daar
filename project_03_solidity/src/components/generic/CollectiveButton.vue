@@ -1,10 +1,9 @@
 <template lang="html">
   <button
-    @mouseup.stop.prevent="(e) => {
+      @mouseup.stop.prevent="(e) => {
     clickCallback(e);
     }"
-    class="button"
-          :class="className">
+      :class="`${className} ${extraClassName} button`">
     <div class="button-body">
       <slot></slot>
     </div>
@@ -16,7 +15,7 @@ import {defineComponent} from 'vue'
 
 export default defineComponent({
   name: 'CollectiveButton',
-  props: {transparent: Boolean},
+  props: {transparent: Boolean, extraClassName: String},
   computed: {
     className(): string {
       return this.transparent ? 'transparent' : 'visible'

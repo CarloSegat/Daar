@@ -33,7 +33,7 @@
 
 <script>
 import {defineComponent} from 'vue'
-import CollectiveButton from '@/components/CollectiveButton.vue'
+import CollectiveButton from '@/components/generic/CollectiveButton.vue'
 
 export default defineComponent({
   name: 'modal',

@@ -19,7 +19,6 @@
       </div>
 
     </card>
-    <button @click="logTotalAmount">[debug] GET TOTAL ETH STORED ON CONTRACT</button>
 
   </div>
 </template>
@@ -28,8 +27,8 @@
 
 import {computed, defineComponent} from 'vue'
 import {useStore} from "vuex";
-import Card from "@/components/Card.vue";
-import ProjectCreation from "@/components/projectCreation.vue";
+import Card from "@/components/generic/Card.vue";
+import ProjectCreation from "@/components/ProjectCreation.vue";
 
 export default defineComponent({
   name: 'Projects',
@@ -47,14 +46,10 @@ export default defineComponent({
     return {selectedProject, projects}
   },
   async mounted() {
-    this.projects =  await this.contract.methods.fetchProjects(this.address).call();
+    this.projects = await this.contract.methods.fetchProjects(this.address).call();
   },
   methods: {
-    async logTotalAmount() {
-      console.log(await this.contract.methods.getTotalBalance().call())
-    },
     async updateProjects() {
-      console.log("updating !!!")
       this.projects = await this.contract.methods.fetchProjects(this.address).call();
     }
   }
